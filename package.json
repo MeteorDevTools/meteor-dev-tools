@@ -1,0 +1,62 @@
+{
+  "name": "ddpmonitor",
+  "version": "1.0.0",
+  "description": "Monitor Meteor DDP Traffic in Chrome",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thebakeryio/meteor-ddp-monitor.git"
+  },
+  "keywords": [
+    "meteor",
+    "ddp"
+  ],
+  "scripts": {
+    "start": "node server.js",
+    "test": "jest",
+    "chrome": "npm run test && webpack --config webpack/chrome.dev.js",
+    "chrome:build": "npm run test && webpack --config webpack/chrome.prod.js"
+  },
+  "jest": {
+    "scriptPreprocessor": "./node_modules/babel-jest",
+    "testFileExtensions": [
+      "js"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ]
+  },
+  "author": "The Bakery",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thebakeryio/meteor-ddp-monitor/issues"
+  },
+  "homepage": "https://chrome.google.com/webstore/detail/ddp-monitor/ippapidnnboiophakmmhkdlchoccbgje",
+  "devDependencies": {
+    "babel-eslint": "^5.0.0",
+    "babel-jest": "^9.0.1",
+    "babel-loader": "^6.2.0",
+    "babel-polyfill": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
+    "eslint": "^2.1.0",
+    "eslint-plugin-react": "^4.2.0",
+    "jest-cli": "^0.9.0",
+    "react-hot-loader": "^1.3.0",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.0",
+    "moment": "^2.11.2",
+    "pretty-bytes": "^3.0.1",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-json-tree": "^0.5.3",
+    "react-notification-system": "^0.2.5",
+    "react-redux": "^4.4.0",
+    "react-tabs": "^0.5.3",
+    "redux": "^3.3.1",
+    "underscore": "^1.8.3"
+  }
+}

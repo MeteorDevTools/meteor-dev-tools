@@ -1,0 +1,34 @@
+html, body {
+  background-color:#ffffff;
+  padding:0;
+  margin:0;
+  height: 100%;
+}
+
+.app-container {
+  height: 100%;
+}
+
+.tab-wrapper {
+  height: 100%;
+}
+
+.app-tabs.react-tabs {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.app-tabs.react-tabs > ul {
+  margin: 0;
+}
+
+.app-tabs.react-tabs > ul > li {
+  margin-left: 0px !important; 
+  bottom: 0;
+}
+
+.app-tab-panel {
+  overflow-y: scroll;
+  height: 100%;
+}
