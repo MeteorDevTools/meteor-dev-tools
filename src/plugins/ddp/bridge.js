@@ -70,7 +70,7 @@ export default {
 
       let pageSetup = () => {
         injectScript('/scripts/lib/error-stack-parser.js');
-        injectScript('/scripts/inject.js');
+        injectScript('/build/inject.js');
       };
 
       chromeSetup.call(this);

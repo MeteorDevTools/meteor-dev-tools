@@ -8,7 +8,8 @@ let __store = null;
 const plugins = [{
   name: 'DDP Monitor',
   reducers: DDPReducers,
-  component: <DDPMonitor />
+  component: <DDPMonitor />,
+  inject: require('./ddp/inject')
 }];
 
 module.exports = {
