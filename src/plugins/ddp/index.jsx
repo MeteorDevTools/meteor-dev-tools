@@ -8,9 +8,11 @@ import TraceProcessor from './lib/trace-processor'
 import Warnings from './lib/warnings'
 import {computeStats} from './lib/stats'
 import Stats from './components/stats'
-import Bridge from './bridge'
-import {addTrace, clearLogs} from './actions/traces'
-import {toggleFilter} from './actions/filters'
+import Bridge from '../../common/bridge'
+import { addTrace, clearLogs } from './actions/traces'
+import { toggleFilter } from './actions/filters'
+import _ from 'underscore';
+import DDPMessageGenerator from './lib/ddp-generator';
 
 let autoscrollToTheBottom = true;
 const _getScrollableSectionEl  = () => {
@@ -20,11 +22,41 @@ const _getScrollableSectionEl  = () => {
 class App extends Component {
   componentDidMount() {
     const dispatch = this.props.dispatch;
-    Bridge.setup((error, trace) => {
-      if(!error){
-        dispatch(addTrace(trace));
-      }
-    }, () => dispatch(clearLogs()));
+    
+    if(chrome && chrome.devtools) {
+      Bridge.setup((error, message) => {
+        if(message && message.eventType === 'ddp-trace'){
+          let data = message.data;
+          let isValid = data && data.messageJSON && 
+            typeof data.isOutbound !== 'undefined';
+          
+          if(!isValid){
+            return;
+          }
+
+          let d = JSON.parse(data.messageJSON);  
+          d = _.isArray(d) ? d : [d];
+
+          _.each(d, function(m){
+            m = _.isString(m) ? JSON.parse(m) : m;
+
+            dispatch(addTrace({
+              message: m,
+              isOutbound: data.isOutbound,
+              stackTrace: data.stackTrace
+            }));
+          });
+        }
+      }, () => dispatch(clearLogs()));
+    } else {
+      // inside standalone web app
+      setInterval(function(){
+        dispatch(addTrace({
+          message: DDPMessageGenerator.generate(),
+          isOutbound: true
+        }));
+      },1000);
+    }
   }
 
   onScroll () {

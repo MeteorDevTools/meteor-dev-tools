@@ -1,3 +1,5 @@
+import ErrorStackParser from 'error-stack-parser';
+
 module.exports = (talkToExtension) => {
   var getStackTrace = function(stackTraceLimit){
     var originalStackTraceLimit = Error.stackTraceLimit;
@@ -19,7 +21,7 @@ module.exports = (talkToExtension) => {
     }
 
     message.stackTrace = stackTrace;
-    talkToExtension('trace', message);
+    talkToExtension('ddp-trace', message);
   };
 
   var oldSend = Meteor.connection._stream.send; 

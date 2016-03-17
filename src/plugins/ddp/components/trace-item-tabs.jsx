@@ -2,7 +2,7 @@ import React from 'react'
 import JSONTree from 'react-json-tree'
 import ItemPropTypes from './trace-item-prop-types'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
-import Bridge from '../bridge'
+import Bridge from '../../../common/bridge'
 import Warnings from './warnings'
 
 export default React.createClass({
