@@ -1,10 +1,10 @@
 {
-  "name": "ddpmonitor",
+  "name": "meteor-dev-tools",
   "version": "1.0.0",
-  "description": "Monitor Meteor DDP Traffic in Chrome",
+  "description": "Meteor Dev Tools extension",
   "repository": {
     "type": "git",
-    "url": "git://github.com/thebakeryio/meteor-ddp-monitor.git"
+    "url": "git://github.com/MeteorDevTools/meteor-dev-tools.git"
   },
   "keywords": [
     "meteor",
@@ -29,9 +29,9 @@
   "author": "The Bakery",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thebakeryio/meteor-ddp-monitor/issues"
+    "url": "https://github.com/MeteorDevTools/meteor-dev-tools/issues"
   },
-  "homepage": "https://chrome.google.com/webstore/detail/ddp-monitor/ippapidnnboiophakmmhkdlchoccbgje",
+  "homepage": "https://github.com/MeteorDevTools/meteor-dev-tools",
   "devDependencies": {
     "babel-eslint": "^5.0.0",
     "babel-jest": "^9.0.1",
