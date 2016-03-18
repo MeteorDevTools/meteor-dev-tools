@@ -1,16 +1,26 @@
 import React from 'react';
 import { createStore, compose, combineReducers } from 'redux';
-import DDPReducers from './ddp/reducers';
 import _ from 'underscore';
+import DDPReducers from './ddp/reducers';
 import DDPMonitor from './ddp';
+import BlazeReducers from './blaze/reducers';
+import BlazeInspector from './blaze';
 
 let __store = null;
-const plugins = [{
-  name: 'DDP Monitor',
-  reducers: DDPReducers,
-  component: <DDPMonitor />,
-  inject: require('./ddp/inject')
-}];
+const plugins = [
+  {
+    name: 'DDP Monitor',
+    reducers: DDPReducers,
+    component: <DDPMonitor />,
+    inject: require('./ddp/inject')
+  },
+  {
+    name: 'Blaze Inspector',
+    reducers: BlazeReducers,
+    component: <BlazeInspector />,
+    inject: require('./blaze/inject')
+  },
+];
 
 module.exports = {
   getStore() {

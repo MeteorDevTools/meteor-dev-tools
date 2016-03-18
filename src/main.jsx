@@ -7,6 +7,7 @@ import NotificationSystem from 'react-notification-system'
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
 import _ from 'underscore';
 import Analytics from './common/analytics';
+import slugify from 'slugify';
 
 class App extends Component {
   showGlobalError(msg) {
@@ -27,10 +28,12 @@ class App extends Component {
   render() {
     const plugins = getPlugins();
     const tabs = _.map(plugins, (p) => {
-      return <Tab key="tab-{p.name}">{p.name}</Tab>;
+      const keyName = `tab-${slugify(p.name)}`;
+      return <Tab key={keyName}>{p.name}</Tab>;
     });
     const tabPanels = _.map(plugins, (p) => {
-      return <TabPanel className="app-tab-panel" key="tab-panel-{p.name}">{p.component}</TabPanel>;
+      const keyName = `tab-panel-${slugify(p.name)}`;
+      return <TabPanel className="app-tab-panel" key={keyName}>{p.component}</TabPanel>;
     });
 
     const notificaitonStyle = {
