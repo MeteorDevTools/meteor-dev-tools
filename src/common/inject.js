@@ -1,4 +1,4 @@
-import { getPlugins } from '../plugins';
+import DDPInject from '../plugins/ddp/inject';
 
 (() => {
   const talkToExtension = (eventType, data, plugin) => {
@@ -14,9 +14,9 @@ import { getPlugins } from '../plugins';
     if (document.readyState === 'complete' || isMeteorDefined) {
       clearInterval(readyStateCheckInterval);
       if(isMeteorDefined){
-        const plugins = getPlugins();
+        const plugins = [DDPInject];
         for(var i=0; i<plugins.length; i++){
-          plugins[i].inject.call(this, talkToExtension);
+          plugins[i].call(this, talkToExtension);
         }
       }
     } 
