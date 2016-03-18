@@ -16,17 +16,17 @@ module.exports = baseConfig({
     path: path.join(__dirname, '../chrome/build/')
   },
   plugins : [
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-      }
-    }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      comments: false,
-      compressor: {
-        warnings: false
-      }
-    })
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     'NODE_ENV': JSON.stringify('production'),
+    //   }
+    // }),
+    // new webpack.optimize.DedupePlugin(),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   comments: false,
+    //   compressor: {
+    //     warnings: false
+    //   }
+    // })
   ],
 });
