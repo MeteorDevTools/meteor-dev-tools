@@ -12,13 +12,11 @@ const plugins = [
     name: 'DDP Monitor',
     reducers: DDPReducers,
     component: <DDPMonitor />,
-    inject: require('./ddp/inject')
   },
   {
     name: 'Blaze Inspector',
     reducers: BlazeReducers,
     component: <BlazeInspector />,
-    inject: require('./blaze/inject')
   },
 ];
 

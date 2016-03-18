@@ -9,34 +9,14 @@ class App extends Component {
     const dispatch = this.props.dispatch;
     if(chrome && chrome.devtools) {
       Bridge.setup((error, message) => {
-        // if(message && message.eventType === 'ddp-trace'){
-        //   let data = message.data;
-        //   let isValid = data && data.messageJSON && 
-        //     typeof data.isOutbound !== 'undefined';
-          
-        //   if(!isValid){
-        //     return;
-        //   }
-
-        //   let d = JSON.parse(data.messageJSON);  
-        //   d = _.isArray(d) ? d : [d];
-
-        //   _.each(d, function(m){
-        //     m = _.isString(m) ? JSON.parse(m) : m;
-
-        //     dispatch(addTrace({
-        //       message: m,
-        //       isOutbound: data.isOutbound,
-        //       stackTrace: data.stackTrace
-        //     }));
-        //   });
-        // }
+        if(message && message.eventType === 'blaze-tree') {
+          dispatch(setBlazeTreeData(message.data));
+        }
       }, () => {
-        // dispatch(clearLogs()) 
+        dispatch(setBlazeTreeData(null));
       });
     } else {
       var fakeBlazeTree = require('./fake');
-      console.error('data is', fakeBlazeTree);
       dispatch(setBlazeTreeData(fakeBlazeTree));
     }
   }

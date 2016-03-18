@@ -1,7 +1,8 @@
-import { getPlugins } from '../plugins';
+import ddpInject from '../plugins/ddp/inject';
+import blazeInject from '../plugins/blaze/inject';
 
 (() => {
-  const talkToExtension = (eventType, data, plugin) => {
+  const talkToExtension = (eventType, data) => {
     window.postMessage({
       eventType : eventType, 
       data: data,
@@ -14,9 +15,9 @@ import { getPlugins } from '../plugins';
     if (document.readyState === 'complete' || isMeteorDefined) {
       clearInterval(readyStateCheckInterval);
       if(isMeteorDefined){
-        const plugins = getPlugins();
+        const plugins = [ddpInject, blazeInject];
         for(var i=0; i<plugins.length; i++){
-          plugins[i].inject.call(this, talkToExtension);
+          plugins[i].call(this, talkToExtension);
         }
       }
     } 

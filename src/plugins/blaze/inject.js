@@ -1,20 +1,5 @@
 module.exports = (talkToExtension) => {
-  
-  // look for top level views
-  // https://github.com/alexcurtis/react-treebeard
-  
   var getViewFromEl = function(el) {
-    // var grabKeysThatAreNotFunctions = function(obj) {
-    //   var result = {};
-    //   var keys = (obj && Object.getOwnPropertyNames(obj)) || [];
-    //   for(var i=0; i<keys.length; i++){
-    //     if(typeof obj[keys[i]] !== 'function'){
-    //       result[keys[i]] = grabKeysThatAreNotFunctions(obj[keys[i]]);
-    //     }
-    //   }
-    //   return result;
-    // };
-
     var view = Blaze.getView(el);
     return (view && {
       name: view.name,
@@ -48,4 +33,6 @@ module.exports = (talkToExtension) => {
   };
   lookForViews($('body'), data);
   console.error('data is', JSON.stringify(data));
+
+  talkToExtension('blaze-tree', data);
 };
