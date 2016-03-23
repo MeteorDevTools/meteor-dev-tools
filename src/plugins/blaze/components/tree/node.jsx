@@ -28,7 +28,13 @@ const Node = React.createClass({
     };
   },
 
+  shouldComponentUpdate(nextProps) {
+    return nextProps !== this.props;
+  },
+
   render () {
+    console.error('@@@ rendering node');
+
     const toggleCollapse = (e) => {
       e.stopPropagation();
       this.props.onToggleCollapse(this.props.node.get('_id'));
@@ -110,7 +116,7 @@ const Node = React.createClass({
           </div>
             { 
               this.props.node.get('isExpanded') ? childNodes.map(node => (
-                <Node node={node} depth={this.props.depth+1}
+                <Node key={node.get('_id')} node={node} depth={this.props.depth+1}
                   getChildNodes={this.props.getChildNodes}
                   changeBlazeNodeSelection={this.props.changeBlazeNodeSelection}
                   onToggleCollapse={this.props.onToggleCollapse}

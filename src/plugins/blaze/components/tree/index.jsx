@@ -13,11 +13,12 @@ export default React.createClass({
     if(this.props.rootNode) {
       return (
         <div>
-          <Node onToggleCollapse={this.props.onToggleCollapse} 
+          <Node key={this.props.rootNode.get('_id')} 
+                onToggleCollapse={this.props.onToggleCollapse} 
                 getChildNodes={this.props.getChildNodes}
                 changeBlazeNodeSelection={this.props.changeBlazeNodeSelection}
                 onHover={this.props.onHover}
-          depth={0} node={this.props.rootNode}/>
+                depth={0} node={this.props.rootNode}/>
         </div>
       );
     } else {
