@@ -93,7 +93,6 @@ module.exports = {
     
     switch(message.event){
       case 'shutdown':
-        alert('shutting down');
         hl.remove();
         break;
       case 'start-inspecting':
