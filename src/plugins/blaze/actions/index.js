@@ -18,6 +18,7 @@ export function setBlazeTreeData(node) {
     nodes[nodeId] = {
       _id: nodeId,
       name: node.name,
+      data: node.data,
       isExpanded: false,
       isSelected: false,
       isHovered: true,

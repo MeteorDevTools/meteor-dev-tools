@@ -1,0 +1,17 @@
+.blaze-inspector {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.blaze-inspector > section {
+  flex:3;
+  overflow: scroll;
+  background-color: yellow;
+}
+
+.blaze-inspector > aside {
+  flex:1;
+  background-color: green;
+}

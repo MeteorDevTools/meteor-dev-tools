@@ -57,22 +57,16 @@ module.exports = {
   },
 
   onMessage: (message) => {
-    // agent.on('highlight', data => hl.highlight(data.node, data.name));
-    // agent.on('highlightMany', nodes => hl.highlightMany(nodes));
-    // agent.on('hideHighlight', () => hl.hideHighlight());
-    // agent.on('startInspecting', () => hl.startInspecting());
-    // agent.on('stopInspecting', () => hl.stopInspecting());
-    // agent.on('shutdown', () => {
-    //   hl.remove();
-    // });
-
     if(message.source !== 'blaze-inspector'){
       return;
     }
     
     switch(message.event){
+      case 'shutdown':
+        alert('shutting down');
+        hl.remove();
+        break;
       case 'start-inspecting':
-        alert('start inspecting');
         hl.startInspecting();
         break;
       case 'hide-highlight':

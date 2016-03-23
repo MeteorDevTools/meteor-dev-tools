@@ -8,6 +8,7 @@ import {
   changeNodeHover
 } from './actions'
 import BlazeTreeView from './components/tree'
+import PropertiesView from './components/props'
 import _ from 'underscore';
 
 class App extends Component {
@@ -28,6 +29,13 @@ class App extends Component {
     }
   }
 
+  componentWillUnmount() {
+    Bridge.sendMessageToThePage({
+      source: 'blaze-inspector',
+      event: 'shutdown'
+    });
+  }
+
   render() {
     const { dispatch, filters, traces, stats } = this.props
     const changeNodeSelection = (nodeId) => {
@@ -36,19 +44,20 @@ class App extends Component {
 
     return (
       <div className="blaze-inspector">
-        <BlazeTreeView rootNode={this.props.getRootNode()}
-          getChildNodes={this.props.getChildNodes}
-          changeBlazeNodeSelection={changeNodeSelection}
-          onToggleCollapse={(nodeId) => dispatch(toggleNodeCollapse(nodeId))} 
-          onHover={(nodeId, isHovered) => dispatch(changeNodeHover(nodeId, isHovered)) }/>
+        <section>
+          <BlazeTreeView rootNode={this.props.getRootNode()}
+            getChildNodes={this.props.getChildNodes}
+            changeBlazeNodeSelection={changeNodeSelection}
+            onToggleCollapse={(nodeId) => dispatch(toggleNodeCollapse(nodeId))} 
+            onHover={(nodeId, isHovered) => dispatch(changeNodeHover(nodeId, isHovered)) }/>
+        </section>
+        <aside>
+          <PropertiesView properties={this.props.getSelectedNodeProps()}/>
+        </aside>
       </div>
     )
   }
 }
-
-// App.propTypes = {
-//   traces : PropTypes.array.isRequired
-// }
 
 export default connect((state) => {
   return {
@@ -70,6 +79,17 @@ export default connect((state) => {
         children.push(state.blazeTree.get(childId));
       });
       return children;
+    },
+    getSelectedNodeProps : () => {
+      let selectedNode = null;
+      state.blazeTree.forEach((value, key) => {
+        if (value.get('isSelected')) {
+          selectedNode = value;
+        }
+      });
+      return selectedNode && {
+        data: selectedNode.get('data')
+      };
     }
   };
 })(App)
