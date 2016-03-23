@@ -19,6 +19,8 @@ export function setBlazeTreeData(node) {
       _id: nodeId,
       name: node.name,
       data: node.data,
+      events: node.events,
+      helpers: node.helpers,
       isExpanded: false,
       isSelected: false,
       isHovered: true,

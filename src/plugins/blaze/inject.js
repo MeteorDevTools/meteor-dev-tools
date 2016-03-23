@@ -16,13 +16,28 @@ module.exports = {
 
     var getViewFromEl = function(el) {
       var view = Blaze.getView(el);
+      var events = [];
+      var _events = (view && view.template && view.template.__eventMaps) || [];
+
+      for(var i=0; i<_events.length; i++) {
+        var props = Object.getOwnPropertyNames(_events[i]);
+        if (props.length !== 0) {
+          events.push(props[0]);
+        }
+      }
+
       return (view && {
         name: view.name,
-        data: view.templateInstance && view.templateInstance().data
+        data: view.templateInstance && view.templateInstance().data,
+        helpers: Object.getOwnPropertyNames(
+          (view.template && view.template.__helpers) || {}
+        ),
+        events: events
       });
     };
 
     var lookForViews = function($el, parent){
+      console.error('looing for views', $el);
       var view = getViewFromEl($el.get(0));
 
       if (view && view.name !== parent.name) {
@@ -31,6 +46,8 @@ module.exports = {
           _id: _id,
           name: view.name,
           data: view.data,
+          helpers: view.helpers,
+          events: view.events,
           children: []
         };
         $el.attr('data-blaze-inspector-id', _id);

@@ -88,7 +88,9 @@ export default connect((state) => {
         }
       });
       return selectedNode && {
-        data: selectedNode.get('data')
+        data: selectedNode.get('data'),
+        events: selectedNode.get('events'),
+        helpers: selectedNode.get('helpers')
       };
     }
   };

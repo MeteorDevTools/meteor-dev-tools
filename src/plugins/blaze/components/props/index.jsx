@@ -4,11 +4,11 @@ import _ from 'underscore';
 
 export default React.createClass({
   render () {
-    if(this.props.properties && this.props.properties.data) {
+    if(this.props.properties) {
       console.error('selected props are', this.props.properties);
 
       const data = this.props.properties.data;
-      const dataSection = (
+      const dataSection = data ? (
           <table>
             <thead></thead>
               <th>Data</th>
@@ -23,10 +23,47 @@ export default React.createClass({
               }
             </tbody>
           </table>
-      );
+      ) : <div>no data</div>;
 
+      const events = this.props.properties.events;
+      const eventsSection = events ? (
+        <table>
+          <thead></thead>
+            <th>Events</th>
+          <tbody>
+            { 
+              events.map((e) => {
+                return <tr>
+                  <td>{e}</td>
+                </tr>;
+              })
+            }
+          </tbody>
+        </table>
+      ) : <div>no events</div>;
 
-      return dataSection;
+      const helpers = this.props.properties.helpers;
+      const helpersSection = helpers ? (
+        <table>
+          <thead></thead>
+            <th>Helpers</th>
+          <tbody>
+            { 
+              helpers.map((h) => {
+                return <tr>
+                  <td>{h}</td>
+                </tr>;
+              })
+            }
+          </tbody>
+        </table>
+      ) : <div>no helpers</div>;
+
+      return <div>
+        {dataSection}
+        {eventsSection}
+        {helpersSection}
+      </div>;
     } else {
       return <div>Select a node to see its properties</div>;
     }
