@@ -11,6 +11,13 @@ export function setBlazeTreeData(node) {
   // unwrap nodes into a list of components with
   // children and parent info
 
+  if (!node) {
+    return { 
+      type: SET_BLAZE_TREE,
+      data: []
+    }
+  }
+
   let nodes = {};
 
   const unwrapNode = (node, parentId) => {

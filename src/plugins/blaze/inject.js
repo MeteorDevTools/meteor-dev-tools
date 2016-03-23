@@ -36,9 +36,9 @@ module.exports = {
       });
     };
 
-    var lookForViews = function($el, parent){
-      console.error('looing for views', $el);
-      var view = getViewFromEl($el.get(0));
+    var lookForViews = function(el, parent){
+      console.error('looing for views', el, typeof el);
+      var view = getViewFromEl(el);
 
       if (view && view.name !== parent.name) {
         var _id = generateId();
@@ -50,15 +50,23 @@ module.exports = {
           events: view.events,
           children: []
         };
-        $el.attr('data-blaze-inspector-id', _id);
-        $el.children().each(function(){
-          lookForViews($(this), node);
-        }); 
+        el.setAttribute('data-blaze-inspector-id', _id);
+
+        for(var i=0; i<el.childNodes.length; i++) {
+          if (el.childNodes[i].nodeType !== 1) {
+            continue;
+          }
+          lookForViews(el.childNodes[i], node);
+        }
+
         parent.children.push(node);
       } else {
-        $el.children().each(function(){
-          lookForViews($(this), parent);
-        });
+        for(var i=0; i<el.childNodes.length; i++) {
+          if (el.childNodes[i].nodeType !== 1) {
+            continue;
+          }
+          lookForViews(el.childNodes[i], parent);
+        }
       }
     };
 
@@ -67,10 +75,15 @@ module.exports = {
       name: 'body',
       children: []
     };
-    lookForViews($('body'), data);
-    console.error('data is', JSON.stringify(data));
+    
 
-    talkToExtension('blaze-tree', data);
+    // XX: wait a little bit to make sure all the jazz
+    // has been rendered
+    setTimeout(function(){
+      lookForViews(document.querySelector('body'), data);
+      console.error('data is', JSON.stringify(data));
+      talkToExtension('blaze-tree', JSON.stringify(data));
+    }, 2000);
   },
 
   onMessage: (message) => {

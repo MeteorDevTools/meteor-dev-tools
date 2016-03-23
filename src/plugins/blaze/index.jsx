@@ -17,7 +17,7 @@ class App extends Component {
     if(chrome && chrome.devtools) {
       Bridge.setup((error, message) => {
         if(message && message.eventType === 'blaze-tree') {
-          dispatch(setBlazeTreeData(message.data));
+          dispatch(setBlazeTreeData(JSON.parse(message.data)));
         }
       }, () => {
         dispatch(setBlazeTreeData(null));
@@ -41,15 +41,19 @@ class App extends Component {
     const changeNodeSelection = (nodeId) => {
       dispatch(changeBlazeNodeSelection(nodeId));
     }
+    const rootNode = this.props.getRootNode();
 
     return (
       <div className="blaze-inspector">
         <section>
-          <BlazeTreeView rootNode={this.props.getRootNode()}
+          { rootNode ? 
+            <BlazeTreeView rootNode={rootNode}
             getChildNodes={this.props.getChildNodes}
             changeBlazeNodeSelection={changeNodeSelection}
             onToggleCollapse={(nodeId) => dispatch(toggleNodeCollapse(nodeId))} 
             onHover={(nodeId, isHovered) => dispatch(changeNodeHover(nodeId, isHovered)) }/>
+            : <div>Looking for signs of Blaze...</div> 
+          }
         </section>
         <aside>
           <PropertiesView properties={this.props.getSelectedNodeProps()}/>
