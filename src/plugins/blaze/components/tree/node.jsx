@@ -29,7 +29,17 @@ const Node = React.createClass({
   },
 
   render () {
-    const toggleCollapse = () => this.props.onToggleCollapse(this.props.node.get('_id'));
+    const toggleCollapse = (e) => {
+      e.stopPropagation();
+      this.props.onToggleCollapse(this.props.node.get('_id'));
+
+      // XX: unhover all the children because they seem to have hover
+      // stuck to them
+      const kids = this.props.getChildNodes(this.props.node.get('_id'));
+      kids.forEach((child) => {
+        this.props.onHover(child.get('_id'), false);
+      });
+    }
     const changeSelection = () => this.props.changeBlazeNodeSelection(this.props.node.get('_id'));
     const childNodes = this.props.getChildNodes(this.props.node.get('_id'));
     const hasChildren = childNodes.length !== 0; 
@@ -74,18 +84,24 @@ const Node = React.createClass({
         } else {
           openingTagStyles = _.extend({}, openingTagStyles, this.selectedNodeStyle);
         }
-      } 
-        
-      if (this.props.node.get('isHovered')) {
-        if (this.props.node.get('isExpanded')) {
-          openingTagStyles = _.extend({}, openingTagStyles, this.hoveredNodeStyle);
-        } else {
-          tagWrapperStyle = _.extend({}, tagWrapperStyle, this.hoveredNodeStyle);
+      } else {
+        if (this.props.node.get('isHovered')) {
+          if (this.props.node.get('isExpanded')) {
+            openingTagStyles = _.extend({}, openingTagStyles, this.hoveredNodeStyle);
+          } else {
+            tagWrapperStyle = _.extend({}, tagWrapperStyle, this.hoveredNodeStyle);
+          }
         }
       }
-      
+
       return (
-        <div style={tagWrapperStyle}>
+        <div style={tagWrapperStyle} onMouseOver={() => {
+          // XX: only handle this if the node is collapsed
+          !this.props.node.get('isExpanded') && onHover(true);
+        }} onMouseOut={() => {
+          // XX: only handle this if the node is collapsed
+          !this.props.node.get('isExpanded') && onHover(false);
+        }}>
           <div style={openingTagStyles} 
           onMouseOver={() => onHover(true)} onMouseOut={() => onHover(false)}
           onClick={changeSelection} onDoubleClick={toggleCollapse}>
