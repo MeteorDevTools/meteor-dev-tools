@@ -17,9 +17,15 @@ import blazeInject from '../plugins/blaze/inject';
       if(isMeteorDefined){
         const plugins = [ddpInject, blazeInject];
         for(var i=0; i<plugins.length; i++){
-          plugins[i].call(this, talkToExtension);
+          plugins[i].setup.call(this, talkToExtension);
         }
+
+        window.__meteor_devtools_receiveMessage = function(message){
+          for(var i=0; i<plugins.length; i++){
+            plugins[i].onMessage && plugins[i].onMessage.call(this, message);
+          }
+        };
       }
-    } 
+    }
   }, 10);
 })();

@@ -5,6 +5,14 @@ export default {
     }
   },
 
+  sendMessageToThePage(message) {
+    if(chrome && chrome.devtools){
+      chrome.devtools.inspectedWindow.eval(
+        `__meteor_devtools_receiveMessage(${JSON.stringify(message)})`
+      );
+    }
+  },
+
   setup(callback, onReload){
     if(chrome && chrome.devtools){
       let chromeSetup = function(){
