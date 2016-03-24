@@ -1,12 +1,13 @@
 import Highlighter from './highlighter';
 
-var hl = new Highlighter(window, node => {
-  console.error('@@ hl selected', node);
-  //agent.selectFromDOMNode(node);
-});
+var hl = new Highlighter(window, node => { /*agent.selectFromDOMNode(node); */ });
   
 module.exports = {
   setup: (talkToExtension) => {
+    if (!Blaze) {
+      return;
+    }
+
     var idCnt = 0;
 
     var generateId = function(){
