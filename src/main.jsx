@@ -8,6 +8,7 @@ import {Tab, Tabs, TabList, TabPanel} from './patch/react-tabs'
 import _ from 'underscore';
 import Analytics from './common/analytics';
 import slugify from 'slugify';
+import Bridge from './common/bridge';
 
 class App extends Component {
   showGlobalError(msg) {
@@ -58,6 +59,7 @@ class App extends Component {
 }
 
 ((rootElement, AppContainer, store) => {
+  Bridge.setup()
   Analytics.setup()
   rootElement.innerHTML = ''
   render(<Provider store={store}><AppContainer /></Provider>, rootElement)

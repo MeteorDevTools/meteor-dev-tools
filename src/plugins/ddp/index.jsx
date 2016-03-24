@@ -16,49 +16,66 @@ import DDPMessageGenerator from './lib/ddp-generator';
 import Analytics from '../../common/analytics';
 
 let autoscrollToTheBottom = true;
-const _getScrollableSectionEl  = () => {
+const _getScrollableSectionEl = () => {
   return document.querySelector('.ddp-monitor > section');
+};
+
+let dispatch = null;
+const onNewMessage = (error, message) => {
+  if(message && message.eventType === 'ddp-trace'){
+    let data = message.data;
+    let isValid = data && data.messageJSON && 
+      typeof data.isOutbound !== 'undefined';
+    
+    if(!isValid){
+      return;
+    }
+
+    let d = JSON.parse(data.messageJSON);  
+    d = _.isArray(d) ? d : [d];
+
+    _.each(d, function(m){
+      m = _.isString(m) ? JSON.parse(m) : m;
+
+      dispatch(addTrace({
+        message: m,
+        isOutbound: data.isOutbound,
+        stackTrace: data.stackTrace
+      }));
+    });
+  }
+};
+
+const onPageReload = () => {
+  dispatch(clearLogs());
 };
 
 class App extends Component {
   componentDidMount() {
-    const dispatch = this.props.dispatch;
+    dispatch = this.props.dispatch;
+    
     if(chrome && chrome.devtools) {
-      Bridge.setup((error, message) => {
-        if(message && message.eventType === 'ddp-trace'){
-          let data = message.data;
-          let isValid = data && data.messageJSON && 
-            typeof data.isOutbound !== 'undefined';
-          
-          if(!isValid){
-            return;
-          }
-
-          let d = JSON.parse(data.messageJSON);  
-          d = _.isArray(d) ? d : [d];
-
-          _.each(d, function(m){
-            m = _.isString(m) ? JSON.parse(m) : m;
-
-            dispatch(addTrace({
-              message: m,
-              isOutbound: data.isOutbound,
-              stackTrace: data.stackTrace
-            }));
-          });
-        }
-      }, () => dispatch(clearLogs()));
+      Bridge.registerMessageCallback(onNewMessage);
+      Bridge.registerPageReloadCallback(onPageReload);
     } else {
       // inside standalone web app
       setInterval(function(){
-        dispatch(addTrace({
-          message: DDPMessageGenerator.generate(),
-          isOutbound: true
-        }));
+        onNewMessage.call(this, null, {
+          eventType: 'ddp-trace',
+          data: {
+            isOutbound: true,
+            messageJSON: JSON.stringify(DDPMessageGenerator.generate())
+          }
+        });
       },1000);
     }
 
     Analytics.trackPageView('meteor ddp monitor');
+  }
+
+  componentWillUnmount() {
+    Bridge.removeMessageCallback(onNewMessage);
+    Bridge.removePageReloadCallback(onPageReload);
   }
 
   onScroll () {

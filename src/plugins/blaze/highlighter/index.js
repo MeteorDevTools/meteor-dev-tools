@@ -44,6 +44,7 @@ class Highlighter {
   }
 
   highlight(node, name) {
+    console.error('----@@@highlighting node', node);
     this.removeMultiOverlay();
     if (!this._overlay) {
       this._overlay = new Overlay(this._win);

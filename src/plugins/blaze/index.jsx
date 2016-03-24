@@ -12,31 +12,48 @@ import PropertiesView from './components/props'
 import _ from 'underscore';
 import Analytics from '../../common/analytics';
 
+let dispatch = null;
+
+const onNewMessage = (error, message) => {
+  if(message && message.eventType === 'blaze-tree') {
+    dispatch(setBlazeTreeData(JSON.parse(message.data)));
+    Bridge.sendMessageToThePage({
+      source: 'blaze-inspector',
+      event: 'start-inspecting'
+    });
+  }
+};
+
+const onPageReload = () => {
+  dispatch(setBlazeTreeData(null));
+};
+
 class App extends Component {
   componentDidMount() {
-    const dispatch = this.props.dispatch;
+    dispatch = this.props.dispatch;
+    
     if(chrome && chrome.devtools) {
-      Bridge.setup((error, message) => {
-        if(message && message.eventType === 'blaze-tree') {
-          dispatch(setBlazeTreeData(JSON.parse(message.data)));
-        }
-      }, () => {
-        dispatch(setBlazeTreeData(null));
-      });
+      Bridge.registerMessageCallback(onNewMessage);
+      Bridge.registerPageReloadCallback(onPageReload);
     } else {
       var fakeBlazeTree = require('./fake');
       console.error('fake data is', fakeBlazeTree);
-      dispatch(setBlazeTreeData(fakeBlazeTree));
+      onNewMessage.call(this, null, {
+        eventType: 'blaze-tree',
+        data: JSON.stringify(fakeBlazeTree)
+      });
     }
 
     Analytics.trackPageView('blaze inspector');
   }
 
   componentWillUnmount() {
-    Bridge.sendMessageToThePage({
-      source: 'blaze-inspector',
-      event: 'shutdown'
-    });
+    Bridge.removeMessageCallback(onNewMessage);
+    Bridge.removePageReloadCallback(onPageReload);
+    // Bridge.sendMessageToThePage({
+    //   source: 'blaze-inspector',
+    //   event: 'shutdown'
+    // });
   }
 
   render() {

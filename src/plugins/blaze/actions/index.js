@@ -12,6 +12,10 @@ export function setBlazeTreeData(node) {
   // children and parent info
 
   if (!node) {
+    Bridge.sendMessageToThePage({
+      source: 'blaze-inspector',
+      event: 'shutdown'
+    });
     return { 
       type: SET_BLAZE_TREE,
       data: []
@@ -44,13 +48,6 @@ export function setBlazeTreeData(node) {
   unwrapNode(node);
   console.error('unwrapped nodes', nodes);
 
-  if (node) {
-    Bridge.sendMessageToThePage({
-      source: 'blaze-inspector',
-      event: 'start-inspecting'
-    });
-  }
-
   return { 
     type: SET_BLAZE_TREE,
     data: nodes
@@ -81,7 +78,7 @@ export function changeNodeHover(nodeId, isHovered) {
     Bridge.sendMessageToThePage({
       source: 'blaze-inspector',
       event: 'highlight',
-      nodeId: nodeId,
+      nodeId: nodeId
     });
   }
 

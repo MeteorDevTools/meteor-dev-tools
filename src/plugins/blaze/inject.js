@@ -1,9 +1,11 @@
 import Highlighter from './highlighter';
 
-var hl = new Highlighter(window, node => { /*agent.selectFromDOMNode(node); */ });
-  
+var hl;
+
 module.exports = {
   setup: (talkToExtension) => {
+    console.error('@@@ setting up blaze inspector jazz');
+
     if (!Blaze) {
       return;
     }
@@ -61,7 +63,6 @@ module.exports = {
     };
 
     var lookForViews = function(el, parent){
-      console.error('looing for views', el, typeof el);
       var view = getViewFromEl(el);
 
       if (view && view.name !== parent.name) {
@@ -105,7 +106,7 @@ module.exports = {
     // has been rendered
     setTimeout(function(){
       lookForViews(document.querySelector('body'), data);
-      console.error('data is', data, JSON.stringify(data));
+      //console.error('data is', data, JSON.stringify(data));
       talkToExtension('blaze-tree', JSON.stringify(data));
     }, 2000);
   },
@@ -117,17 +118,24 @@ module.exports = {
     
     switch(message.event){
       case 'shutdown':
-        hl.remove();
+        console.error('@@@ shutdown');
+        hl && hl.remove();
+        hl = null;
         break;
       case 'start-inspecting':
-        hl.startInspecting();
+        console.error('@@@ start-inspecting');
+        hl = new Highlighter(window, node => { /*agent.selectFromDOMNode(node); */ });
+        hl && hl.startInspecting();
         break;
       case 'hide-highlight':
-        hl.hideHighlight();
+        console.error('@@@ hide-highlight');
+        hl && hl.hideHighlight();
         break;
       case 'highlight':
-        hl.highlight(
-          $('[data-blaze-inspector-id=' + message.nodeId + ']').get(0), 'element'
+        console.error('@@@ highlight', message.nodeId);
+        hl && hl.highlight(
+          document.querySelector('[data-blaze-inspector-id=' + message.nodeId + ']'), 
+          'element'
         );
         break;
       default:
