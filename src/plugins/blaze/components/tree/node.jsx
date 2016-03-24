@@ -75,14 +75,13 @@ const Node = React.createClass({
     }
     
     return (
-      <div style={styles} 
-        onMouseOver={() => this.onHover(true)}
+      <div style={styles} onMouseOver={() => this.onHover(true)}
         onMouseOut={() => this.onHover(false)}>
         <div className="tag-wrap" style={this.getStyles(true)} onClick={this.changeSelection}>
           &lt;<span className={`tag-name ${this.selectedNodeClassName()}`}>
             {this.nodeOpeningTagContent()}</span>&gt;
         </div>
-        <div className="tag-wrap" style={this.getStyles(false)}>
+        <div className="tag-wrap" style={this.getStyles(false)} onClick={this.changeSelection}>
           &lt;<span className={`tag-name ${this.selectedNodeClassName()}`}>
             {this.nodeClosingTagContent()}</span>&gt;
         </div>
@@ -160,9 +159,11 @@ const Node = React.createClass({
                   changeBlazeNodeSelection={this.props.changeBlazeNodeSelection}
                   onToggleCollapse={this.props.onToggleCollapse}
                   onHover={this.props.onHover} />
-              )) : "..."
+              )) : <span>&#8230;</span>
             }
-          <div className="tag-wrap" style={this.getStyles(false)}>
+          <div className="tag-wrap" style={this.getStyles(false)}
+            onClick={() => !this.isExpanded() && this.changeSelection() }
+            onDoubleClick={(e) => !this.isExpanded() && toggleCollapse(e) }>
             &lt;<span className={`tag-name ${!this.isExpanded() ? this.selectedNodeClassName() : ''}`}>
               {this.nodeClosingTagContent()}</span>&gt;
           </div>
