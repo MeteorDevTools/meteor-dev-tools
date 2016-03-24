@@ -4,12 +4,6 @@ import _ from 'underscore';
 import NodeType from './node-prop-type';
 
 const Node = React.createClass({
-  propTypes : {
-    node: NodeType,
-    depth: React.PropTypes.number.isRequired,
-    onToggleCollapse: React.PropTypes.func.isRequired
-  },
-
   selectedNodeStyle : {
     backgroundColor: 'rgb(56,121,217)'
   },
@@ -90,8 +84,6 @@ const Node = React.createClass({
   },
 
   render () {
-    console.error('@@@ rendering node');
-
     const toggleCollapse = (e) => {
       e.stopPropagation();
       this.props.onToggleCollapse(this.props.node.get('_id'));

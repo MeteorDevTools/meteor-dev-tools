@@ -5,10 +5,6 @@ import NodeType from './node-prop-type';
 import Node from './node';
 
 export default React.createClass({
-  propTypes : {
-    nodes : NodeType,
-    onToggleCollapse : React.PropTypes.func.isRequired
-  },
   render (){
     if(this.props.rootNode) {
       return (

@@ -46,8 +46,7 @@ export function setBlazeTreeData(node) {
   };
 
   unwrapNode(node);
-  console.error('unwrapped nodes', nodes);
-
+  
   return { 
     type: SET_BLAZE_TREE,
     data: nodes

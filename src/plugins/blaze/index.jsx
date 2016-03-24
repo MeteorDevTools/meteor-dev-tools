@@ -35,9 +35,13 @@ class App extends Component {
     if(chrome && chrome.devtools) {
       Bridge.registerMessageCallback(onNewMessage);
       Bridge.registerPageReloadCallback(onPageReload);
+
+      Bridge.sendMessageToThePage({
+        source: 'blaze-inspector',
+        event: 'get-blaze-data'
+      });
     } else {
       var fakeBlazeTree = require('./fake');
-      console.error('fake data is', fakeBlazeTree);
       onNewMessage.call(this, null, {
         eventType: 'blaze-tree',
         data: JSON.stringify(fakeBlazeTree)
@@ -50,10 +54,6 @@ class App extends Component {
   componentWillUnmount() {
     Bridge.removeMessageCallback(onNewMessage);
     Bridge.removePageReloadCallback(onPageReload);
-    // Bridge.sendMessageToThePage({
-    //   source: 'blaze-inspector',
-    //   event: 'shutdown'
-    // });
   }
 
   render() {
@@ -89,7 +89,6 @@ export default connect((state) => {
   return {
     blazeTree: state.blazeTree,
     getRootNode : () => {
-      // console.error('getting root node', state.blazeTree);
       let rootNodeId = null;
       state.blazeTree.forEach((value, key) => {
         if (!value.get('parentId')) {
