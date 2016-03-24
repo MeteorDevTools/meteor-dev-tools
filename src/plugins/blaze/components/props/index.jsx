@@ -1,71 +1,44 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import _ from 'underscore';
+import JSONTree from 'react-json-tree';
 
 export default React.createClass({
   render () {
     if(this.props.properties) {
+      let getArrowStyle = (type, expanded) => ({ marginTop: 4 });
       console.error('selected props are', this.props.properties);
 
       const data = this.props.properties.data;
-      const dataSection = data ? (
-          <table>
-            <thead></thead>
-              <th>Data</th>
-            <tbody>
-              { 
-                data.map((v, k) => {
-                  return <tr>
-                    <td>{k}</td>
-                    <td>{JSON.stringify(v)}</td>
-                  </tr>;
-                })
-              }
-            </tbody>
-          </table>
-      ) : <div>no data</div>;
-
       const events = this.props.properties.events;
-      const eventsSection = events ? (
-        <table>
-          <thead></thead>
-            <th>Events</th>
-          <tbody>
-            { 
-              events.map((e) => {
-                return <tr>
-                  <td>{e}</td>
-                </tr>;
-              })
-            }
-          </tbody>
-        </table>
-      ) : <div>no events</div>;
-
       const helpers = this.props.properties.helpers;
-      const helpersSection = helpers ? (
-        <table>
-          <thead></thead>
-            <th>Helpers</th>
-          <tbody>
-            { 
-              helpers.map((h) => {
-                return <tr>
-                  <td>{h}</td>
-                </tr>;
-              })
-            }
-          </tbody>
-        </table>
-      ) : <div>no helpers</div>;
+      
+      console.error('@@@@@ data is', data);
 
       return <div>
-        {dataSection}
-        {eventsSection}
-        {helpersSection}
+        { data && data.size !== 0 ? (
+          <div>
+            <div className="section-separator">Data</div>
+            <div className="treeview-wrapper">
+              <JSONTree data={data.toJS()} hideRoot={true} getArrowStyle={getArrowStyle} />
+            </div>
+          </div>
+        ) : ''}
+        { events && events.size !== 0 ? (
+          <div>
+            <div className="section-separator">Events</div>
+            <ul className="stats">{events.map((e) => <li>{e}</li>)}</ul>
+          </div>
+        ) : ''}
+        { helpers && helpers.size !== 0 ? (
+          <div>
+            <div className="section-separator">Helpers</div>
+            <ul className="stats">{helpers.map((h) => <li>{h}</li>)}</ul>
+          </div>
+        ) : ''}
       </div>;
     } else {
-      return <div>Select a node to see its properties</div>;
+      return <div></div>;
     }
   }
 });

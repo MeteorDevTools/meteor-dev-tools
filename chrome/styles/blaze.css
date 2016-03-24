@@ -12,8 +12,9 @@
   overflow: scroll;
   font-size: 11px !important;
   font-family: Menlo, monospace;
-  padding: 6px 12px;
+  padding: 6px 12px 35px;
   line-height: 16px;
+  overflow-y: scroll;
 }
 
 .blaze-inspector > section .collapse-toggler {
@@ -29,10 +30,45 @@
 }
 
 .blaze-inspector > aside {
+  font-family: 'Lucida Grande', sans-serif;
+  font-size: 12px;
   flex:1;
-  background-color: green;
   max-width: 25%;
   overflow: hidden;
+  border-left: solid 1px #ccc;
+  overflow-y: scroll;
+}
+
+.blaze-inspector > aside .treeview-wrapper {
+  margin-left: -10px;
+  margin-top: -5px;
+}
+
+.blaze-inspector > aside .section-separator {
+  background-color: #ddd;
+  padding: 0 5px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  color: rgb(50, 50, 50);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: 16px;
+}
+
+.blaze-inspector > aside ul.stats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.blaze-inspector > aside ul.stats li {
+  color: rgb(200, 0, 0);
+  padding: 5px;
+}
+
+.blaze-inspector > aside ul.stats li:nth-child(odd) {
+  background-color: #F5F5F5;
 }
 
 .blaze-inspector > section .tag-name.selected-node {
