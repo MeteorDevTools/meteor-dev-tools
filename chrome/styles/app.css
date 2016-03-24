@@ -20,7 +20,7 @@ html, body {
 }
 
 .app-tabs.react-tabs > ul {
-  margin: -1px 0 0 -6px;
+  margin: 0px 0 0 -9px;
 }
 
 .app-tabs.react-tabs > ul > li {
