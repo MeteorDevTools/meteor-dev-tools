@@ -14,6 +14,29 @@ module.exports = {
       return 'node-' + idCnt;
     };
 
+    var cleanupData = function(data){
+      if(!data){
+        return data;
+      }
+
+      var d = {};
+      var keys =  Object.getOwnPropertyNames(data);
+
+      for(var i=0; i<keys.length; i++) {
+        var serializedFieldData = null; 
+
+        try {
+          JSON.stringify(data[keys[i]])
+        } catch(e) {
+          serializedFieldData = data[keys[i]].toString();
+        }
+
+        d[keys[i]] = serializedFieldData || data[keys[i]];
+      }
+
+      return d;
+    };
+
     var getViewFromEl = function(el) {
       var view = Blaze.getView(el);
       var events = [];
@@ -28,7 +51,7 @@ module.exports = {
 
       return (view && {
         name: view.name,
-        data: view.templateInstance && view.templateInstance().data,
+        data: cleanupData(view.templateInstance && view.templateInstance().data),
         helpers: Object.getOwnPropertyNames(
           (view.template && view.template.__helpers) || {}
         ),
@@ -81,7 +104,7 @@ module.exports = {
     // has been rendered
     setTimeout(function(){
       lookForViews(document.querySelector('body'), data);
-      console.error('data is', JSON.stringify(data));
+      console.error('data is', data, JSON.stringify(data));
       talkToExtension('blaze-tree', JSON.stringify(data));
     }, 2000);
   },
