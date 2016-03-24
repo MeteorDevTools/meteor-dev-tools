@@ -11,15 +11,15 @@ const Node = React.createClass({
   },
 
   selectedNodeStyle : {
-    backgroundColor: 'red'
+    backgroundColor: 'rgb(56,121,217)'
   },
 
   hoveredNodeStyle : {
-    backgroundColor: 'rgba(255,0,0,0.5)'
+    backgroundColor: 'rgba(56,121,217,0.1)'
   },
 
   getPaddingStyle () {
-    return {paddingLeft: `${5*this.props.depth}px`};
+    return {paddingLeft: `${3*this.props.depth}px`};
   },
 
   getStyles (openingTag) {
@@ -49,17 +49,22 @@ const Node = React.createClass({
     const changeSelection = () => this.props.changeBlazeNodeSelection(this.props.node.get('_id'));
     const childNodes = this.props.getChildNodes(this.props.node.get('_id'));
     const hasChildren = childNodes.length !== 0; 
-    const nodeOpeningTagContent = `<${this.props.node.get('name')}>`;
-    const nodeClosingTagContent = `</${this.props.node.get('name')}>`;
+    const nodeOpeningTagContent = `${this.props.node.get('name')}`;
+    const nodeClosingTagContent = `/${this.props.node.get('name')}`;
     const expansionToggler = (
       <span onClick={toggleCollapse}>
-        {this.props.node.get('isExpanded') ? <span>&#9660;</span> : <span>&#9654;</span> }
+        {this.props.node.get('isExpanded') ?
+        <span className="collapse-toggler">&#9660;</span> :
+        <span className="collapse-toggler">&#9654;</span> }
       </span>
     );
 
     const onHover = (isHovered) => {
       this.props.onHover(this.props.node.get('_id'), isHovered);
     };
+
+    const selectedNodeClassName = this.props.node.get('isSelected') ?
+      'selected-node' : '';
 
     // empty node
     if (!hasChildren) {
@@ -76,8 +81,12 @@ const Node = React.createClass({
         <div style={styles} 
           onMouseOver={() => onHover(true)}
           onMouseOut={() => onHover(false)}>
-          <div style={this.getStyles(true)} onClick={changeSelection}>{nodeOpeningTagContent}</div>
-          <div style={this.getStyles(false)}>{nodeClosingTagContent}</div>
+          <div className="tag-wrap" style={this.getStyles(true)} onClick={changeSelection}>
+            &lt;<span className={`tag-name ${selectedNodeClassName}`}>{nodeOpeningTagContent}</span>&gt;
+          </div>
+          <div className="tag-wrap" style={this.getStyles(false)}>
+            &lt;<span className={`tag-name ${selectedNodeClassName}`}>{nodeClosingTagContent}</span>&gt;
+          </div>
         </div>
       );
     } else {
@@ -108,11 +117,11 @@ const Node = React.createClass({
           // XX: only handle this if the node is collapsed
           !this.props.node.get('isExpanded') && onHover(false);
         }}>
-          <div style={openingTagStyles} 
+          <div className="tag-wrap" style={openingTagStyles} 
           onMouseOver={() => onHover(true)} onMouseOut={() => onHover(false)}
           onClick={changeSelection} onDoubleClick={toggleCollapse}>
             {expansionToggler}
-            {nodeOpeningTagContent}
+            &lt;<span className={`tag-name ${selectedNodeClassName}`}>{nodeOpeningTagContent}</span>&gt;
           </div>
             { 
               this.props.node.get('isExpanded') ? childNodes.map(node => (
@@ -123,7 +132,10 @@ const Node = React.createClass({
                   onHover={this.props.onHover} />
               )) : "..."
             }
-          <div style={this.getStyles(false)}>{nodeClosingTagContent}</div>
+          <div className="tag-wrap" style={this.getStyles(false)}>
+            &lt;<span className={`tag-name ${!this.props.node.get('isExpanded') ? selectedNodeClassName : ''}`}>
+              {nodeClosingTagContent}</span>&gt;
+          </div>
         </div> 
       );
     }
