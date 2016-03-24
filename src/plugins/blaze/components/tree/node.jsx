@@ -33,6 +33,10 @@ const Node = React.createClass({
   },
 
   render () {
+    const isExpanded = this.props.node.get('isExpanded');
+    const isSelected = this.props.node.get('isSelected');
+    const isHovered = this.props.node.get('isHovered');
+
     console.error('@@@ rendering node');
 
     const toggleCollapse = (e) => {
@@ -53,7 +57,7 @@ const Node = React.createClass({
     const nodeClosingTagContent = `/${this.props.node.get('name')}`;
     const expansionToggler = (
       <span onClick={toggleCollapse}>
-        {this.props.node.get('isExpanded') ?
+        { isExpanded ?
         <span className="collapse-toggler">&#9660;</span> :
         <span className="collapse-toggler">&#9654;</span> }
       </span>
@@ -63,16 +67,15 @@ const Node = React.createClass({
       this.props.onHover(this.props.node.get('_id'), isHovered);
     };
 
-    const selectedNodeClassName = this.props.node.get('isSelected') ?
-      'selected-node' : '';
+    const selectedNodeClassName = isSelected ? 'selected-node' : '';
 
     // empty node
     if (!hasChildren) {
       let styles = this.getPaddingStyle();
-      if (this.props.node.get('isSelected')) {
+      if (isSelected) {
         styles = _.extend({}, styles, this.selectedNodeStyle);
       } else {
-        if (this.props.node.get('isHovered')) {
+        if (isHovered) {
           styles = _.extend({}, styles, this.hoveredNodeStyle);
         }  
       }
@@ -93,15 +96,15 @@ const Node = React.createClass({
       let tagWrapperStyle = this.getPaddingStyle();
       let openingTagStyles = this.getStyles(true);
 
-      if (this.props.node.get('isSelected')) {
-        if (!this.props.node.get('isExpanded')) {
+      if (isSelected) {
+        if (!isExpanded) {
           tagWrapperStyle = _.extend({}, tagWrapperStyle, this.selectedNodeStyle);
         } else {
           openingTagStyles = _.extend({}, openingTagStyles, this.selectedNodeStyle);
         }
       } else {
-        if (this.props.node.get('isHovered')) {
-          if (this.props.node.get('isExpanded')) {
+        if (isHovered) {
+          if (isExpanded) {
             openingTagStyles = _.extend({}, openingTagStyles, this.hoveredNodeStyle);
           } else {
             tagWrapperStyle = _.extend({}, tagWrapperStyle, this.hoveredNodeStyle);
@@ -112,10 +115,10 @@ const Node = React.createClass({
       return (
         <div style={tagWrapperStyle} onMouseOver={() => {
           // XX: only handle this if the node is collapsed
-          !this.props.node.get('isExpanded') && onHover(true);
+          !isExpanded && onHover(true);
         }} onMouseOut={() => {
           // XX: only handle this if the node is collapsed
-          !this.props.node.get('isExpanded') && onHover(false);
+          !isExpanded && onHover(false);
         }}>
           <div className="tag-wrap" style={openingTagStyles} 
           onMouseOver={() => onHover(true)} onMouseOut={() => onHover(false)}
@@ -124,7 +127,7 @@ const Node = React.createClass({
             &lt;<span className={`tag-name ${selectedNodeClassName}`}>{nodeOpeningTagContent}</span>&gt;
           </div>
             { 
-              this.props.node.get('isExpanded') ? childNodes.map(node => (
+              isExpanded ? childNodes.map(node => (
                 <Node key={node.get('_id')} node={node} depth={this.props.depth+1}
                   getChildNodes={this.props.getChildNodes}
                   changeBlazeNodeSelection={this.props.changeBlazeNodeSelection}
@@ -133,7 +136,7 @@ const Node = React.createClass({
               )) : "..."
             }
           <div className="tag-wrap" style={this.getStyles(false)}>
-            &lt;<span className={`tag-name ${!this.props.node.get('isExpanded') ? selectedNodeClassName : ''}`}>
+            &lt;<span className={`tag-name ${!isExpanded ? selectedNodeClassName : ''}`}>
               {nodeClosingTagContent}</span>&gt;
           </div>
         </div> 
