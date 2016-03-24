@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import { Provider, connect } from 'react-redux'
 import React, { Component } from 'react';
 import NotificationSystem from 'react-notification-system'
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
+import {Tab, Tabs, TabList, TabPanel} from './patch/react-tabs'
 import _ from 'underscore';
 import Analytics from './common/analytics';
 import slugify from 'slugify';

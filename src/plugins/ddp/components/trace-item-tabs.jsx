@@ -1,7 +1,7 @@
 import React from 'react'
 import JSONTree from 'react-json-tree'
 import ItemPropTypes from './trace-item-prop-types'
-import {Tab, Tabs, TabList, TabPanel} from 'react-tabs'
+import {Tab, Tabs, TabList, TabPanel} from '../../../patch/react-tabs'
 import Bridge from '../../../common/bridge'
 import Warnings from './warnings'
 
