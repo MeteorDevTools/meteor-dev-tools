@@ -10,6 +10,7 @@ import {
 import BlazeTreeView from './components/tree'
 import PropertiesView from './components/props'
 import _ from 'underscore';
+import Analytics from '../../common/analytics';
 
 class App extends Component {
   componentDidMount() {
@@ -27,6 +28,8 @@ class App extends Component {
       console.error('fake data is', fakeBlazeTree);
       dispatch(setBlazeTreeData(fakeBlazeTree));
     }
+
+    Analytics.trackPageView('blaze inspector');
   }
 
   componentWillUnmount() {

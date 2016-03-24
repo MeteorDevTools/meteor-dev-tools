@@ -13,6 +13,7 @@ import { addTrace, clearLogs } from './actions/traces'
 import { toggleFilter } from './actions/filters'
 import _ from 'underscore';
 import DDPMessageGenerator from './lib/ddp-generator';
+import Analytics from '../../common/analytics';
 
 let autoscrollToTheBottom = true;
 const _getScrollableSectionEl  = () => {
@@ -22,7 +23,6 @@ const _getScrollableSectionEl  = () => {
 class App extends Component {
   componentDidMount() {
     const dispatch = this.props.dispatch;
-    
     if(chrome && chrome.devtools) {
       Bridge.setup((error, message) => {
         if(message && message.eventType === 'ddp-trace'){
@@ -57,6 +57,8 @@ class App extends Component {
         }));
       },1000);
     }
+
+    Analytics.trackPageView('meteor ddp monitor');
   }
 
   onScroll () {

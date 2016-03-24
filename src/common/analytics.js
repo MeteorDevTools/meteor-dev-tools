@@ -12,13 +12,10 @@ module.exports = {
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga'); // Note: https protocol here
     
-    ga;
-
     ga('create', 'UA-41814664-7', 'auto');
     // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
     ga('set', 'checkProtocolTask', function(){});
     ga('require', 'displayfeatures');
-    ga('send', 'pageview', 'meteor ddp monitor');
   },
 
   trackPageView(pageUrl) {
